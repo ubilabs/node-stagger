@@ -22,5 +22,6 @@
   ],
   "author": "Ubilabs",
   "license": "BSD",
-  "dependencies": {}
+  "dependencies": {},
+  "readmeFilename": "README.md"
 }
