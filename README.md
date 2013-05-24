@@ -2,6 +2,12 @@
 
 Execute a stack with a given 'request-per-seconds' and 'max-requests' rate.
 
+### Install
+
+```sh
+npm install stagger
+```
+
 ### Usage
 
 ```js
