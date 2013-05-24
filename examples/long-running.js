@@ -1,4 +1,4 @@
-var Stagger = require("../stagger"),
+var Stagger = require("../lib/stagger"),
   stagger = new Stagger();
 
 function longRunning(i){
