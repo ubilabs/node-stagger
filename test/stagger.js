@@ -1,4 +1,4 @@
-/* global describe, it, beforeEach */
+/* global describe, it, beforeEach, afterEach */
 
 var assert = require('assert'),
   Stagger = require('../lib/stagger'),
@@ -6,16 +6,18 @@ var assert = require('assert'),
   batch = [],
   longBatch = [],
   i,
+  called,
   staggerDefaults = {
-  options: Stagger.options,
-  stackIndex: -1,
-  responseCount: 0,
-  currentRequests: 0,
-  stack: []
-};
+    options: Stagger.options,
+    stackIndex: -1,
+    responseCount: 0,
+    currentRequests: 0,
+    stack: []
+  };
 
 function immediate(i) {
   return function(callback) {
+    called = true;
     callback(i);
   };
 }
@@ -37,6 +39,17 @@ for (i = 0; i < 32; i++) {
 for (i = 0; i < 32; i++) {
   longBatch.push(longRunning(i));
 }
+
+afterEach(function() {
+  called = false,
+  staggerDefaults = {
+    options: Stagger.options,
+    stackIndex: -1,
+    responseCount: 0,
+    currentRequests: 0,
+    stack: []
+  };
+});
 
 describe('new Stagger()', function() {
 
@@ -147,5 +160,41 @@ describe('Stagger', function() {
       stagger.start();
 
     });
+  });
+
+  describe('next()', function() {
+
+    beforeEach(function() {
+      stagger = new Stagger();
+    });
+
+    it('should add to the stackIndex', function() {
+      var index = stagger.stackIndex;
+      stagger.next();
+      assert.equal(index + 1, stagger.stackIndex);
+    });
+
+    it('should call the callback', function() {
+      stagger.push(immediate());
+      stagger.next();
+
+      assert(called);
+    });
+
+    it('should emit progess after callback', function(done) {
+
+      function onProgess() {
+        stagger.finish();
+
+        stagger.removeListener('progress', onProgess);
+        done();
+      }
+
+      stagger.on('progress', onProgess);
+
+      stagger.push(immediate());
+      stagger.next();
+    });
+
   });
 });
