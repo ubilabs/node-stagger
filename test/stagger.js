@@ -7,13 +7,7 @@ var assert = require('assert'),
   longBatch = [],
   i,
   called,
-  staggerDefaults = {
-    options: Stagger.options,
-    stackIndex: -1,
-    responseCount: 0,
-    currentRequests: 0,
-    stack: []
-  };
+  staggerDefaults;
 
 function immediate(i) {
   return function(callback) {
@@ -40,7 +34,7 @@ for (i = 0; i < 32; i++) {
   longBatch.push(longRunning(i));
 }
 
-afterEach(function() {
+beforeEach(function() {
   called = false,
   staggerDefaults = {
     options: Stagger.options,
@@ -57,23 +51,23 @@ describe('new Stagger()', function() {
     stagger = new Stagger();
   });
 
-  it('should have options', function() {
-    assert.deepEqual(stagger, staggerDefaults);
-  });
-
   it('should inherit from event emitter', function(done) {
     stagger.on('foo', done);
     stagger.emit('foo');
   });
+
+  it('should have options', function() {
+    assert.deepEqual(stagger.options, staggerDefaults.options);
+  });
+
 });
 
 describe('new Stagger(options)', function() {
 
   it('should have extended options', function() {
-    staggerDefaults.options.extendedOption = true;
 
-    var extendedStagger = new Stagger({'extendedOption': true});
-    assert.deepEqual(extendedStagger, staggerDefaults);
+    var stagger = new Stagger({'extendedOption': true});
+    assert(stagger.options.extendedOption);
   });
 
 });
