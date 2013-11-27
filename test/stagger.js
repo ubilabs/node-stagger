@@ -80,8 +80,9 @@ describe('Stagger', function() {
 
   describe('push(function)', function() {
     it('should add one to the stagger', function() {
-      stagger.push(immediate('one'));
+      stagger.push(immediate(1));
       assert.equal(1, stagger.stack.length);
+      assert(typeof stagger.stack[0] == 'function');
     });
   });
 
