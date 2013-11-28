@@ -2,7 +2,7 @@
 
 Execute a stack with a given 'request-per-seconds' and 'max-requests' rate.
 
-[![Build Status](https://travis-ci.org/ubilabs/node-stagger.png)](https://travis-ci.org/ubilabs/node-stagger)
+[![NPM version](https://badge.fury.io/js/stagger.png)](https://npmjs.org/package/stagger) [![Build Status](https://travis-ci.org/ubilabs/node-stagger.png)](https://travis-ci.org/ubilabs/node-stagger)
 ### Install
 
 ```sh
