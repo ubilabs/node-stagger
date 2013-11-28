@@ -16,6 +16,13 @@ function immediate(i) {
   };
 }
 
+function doubleCallback(i) {
+  return function(callback) {
+    callback(i);
+    callback(i);
+  };
+}
+
 function longRunning(i) {
   var delay = Math.round(Math.random() * 1000) + 1000;
 
@@ -153,7 +160,20 @@ describe('Stagger', function() {
 
       stagger.push(longBatch);
       stagger.start();
+    });
 
+    it('should only call the callback once', function() {
+
+      stagger.push(doubleCallback(1));
+
+      function callDouble() {
+        stagger.next();
+      }
+
+      assert.throws(
+        callDouble,
+        Error
+      );
     });
   });
 
