@@ -97,12 +97,18 @@ describe('Stagger', function() {
     it('should add an array to the stagger', function() {
       stagger.push(batch);
       assert.equal(32, stagger.stack.length);
+      assert(typeof stagger.stack[0] == 'function');
+      assert(typeof stagger.stack[31] == 'function');
     });
   });
 
   describe('start()', function() {
+    it('should set startTime', function() {
+      stagger.start();
+      assert(stagger.startTime);
+    });
+
     it('should set interval', function() {
-      stagger.push(batch);
       stagger.start();
       assert.ok(stagger.interval);
     });
@@ -110,12 +116,15 @@ describe('Stagger', function() {
 
   describe('stop()', function() {
     it('should clear interval', function() {
+      stagger.start();
+      assert.ok(stagger.interval);
       stagger.stop();
       assert.ok(!stagger.interval);
     });
   });
 
   describe('finish()', function() {
+
     it('should emit finish event', function(done) {
       stagger.on('finish', function() {
         done();
@@ -123,9 +132,21 @@ describe('Stagger', function() {
 
       stagger.finish();
     });
+
+    it('should send statistics', function(done) {
+      stagger.start();
+
+      stagger.on('finish', function(data) {
+        if (data) {
+          done();
+        }
+      });
+
+      stagger.finish();
+    });
   });
 
-  describe('progress()', function() {
+  describe('respond()', function() {
     it('should emit progress event', function(done) {
 
       function onProgess() {
@@ -137,12 +158,12 @@ describe('Stagger', function() {
 
       stagger.on('progress', onProgess);
 
-      stagger.push(batch);
+      stagger.push(immediate(1));
       stagger.start();
     });
 
 
-    it('should emit batch.length progress event', function(done) {
+    it('should emit batch.length progress events', function(done) {
       this.timeout(10000);
       var progressCount = 0;
 
@@ -151,14 +172,12 @@ describe('Stagger', function() {
       });
 
       stagger.on('finish', function() {
-
-        if (progressCount == longBatch.length) {
+        if (progressCount == batch.length) {
           done();
         }
-
       });
 
-      stagger.push(longBatch);
+      stagger.push(batch);
       stagger.start();
     });
 
@@ -178,10 +197,6 @@ describe('Stagger', function() {
   });
 
   describe('next()', function() {
-
-    beforeEach(function() {
-      stagger = new Stagger();
-    });
 
     it('should add to the stackIndex', function() {
       var index = stagger.stackIndex;
