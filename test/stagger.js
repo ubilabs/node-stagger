@@ -163,7 +163,7 @@ describe('Stagger', function() {
     });
 
 
-    it('should emit batch.length progress events', function(done) {
+    it('should emit ' + batch.length + ' (batch.length) progress events', function(done) {
       this.timeout(10000);
       var progressCount = 0;
 
