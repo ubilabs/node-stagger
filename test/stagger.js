@@ -198,7 +198,7 @@ describe('Stagger', function() {
 
   describe('next()', function() {
 
-    it('should add to the stackIndex', function() {
+    it('should add 1 to the stackIndex', function() {
       var index = stagger.stackIndex;
       stagger.next();
       assert.equal(index + 1, stagger.stackIndex);
