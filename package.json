@@ -1,6 +1,6 @@
 {
   "name": "stagger",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Execute a stack with a given 'request-per-seconds' and 'max-requests' rate.",
   "main": "lib/stagger.js",
   "directories": {
