@@ -67,5 +67,3 @@ stagger.start();
 ### Author
 
 Martin Kleppe - kleppe@ubilabs.net
-
-[![Analytics](https://ga-beacon.appspot.com/UA-57649-14/node-stagger)](https://github.com/igrigorik/ga-beacon)
